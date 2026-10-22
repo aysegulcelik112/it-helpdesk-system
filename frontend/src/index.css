@@ -1,0 +1,215 @@
+/**
+ * IT Destek Talep Sistemi - İş Emri Fişi Tasarımı
+ * 
+ * Konsept: Karbon kopyalı iş emri formları, perforeli fiş kağıtları,
+ * kauçuk damga izleri - teknik servis/atölye estetiği
+ */
+
+/* CSS Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* CSS Değişkenleri - İş Emri Fişi Renk Paleti */
+:root {
+  /* Zemin Renkleri - Karbon Kağıdı */
+  --color-bg: #E7ECEF;              /* Soluk karbon kağıdı mavi-grisi */
+  --color-surface: #F4F6F7;         /* Kağıt beyazı */
+  --color-border: #B7C0C7;          /* Defter çizgisi gri-mavi */
+  
+  /* Metin/Mürekkep */
+  --color-text-primary: #1B2A4A;    /* Dolma kalem mürekkebi */
+  --color-text-secondary: #4A5568;  /* Soluk mürekkep */
+  --color-text-muted: #6B7280;      /* Çok soluk mürekkep */
+  
+  /* Damga Renkleri */
+  --color-danger: #C1440E;          /* Kauçuk damga kırmızısı (Acil/Açık) */
+  --color-success: #2F6B4F;         /* Damga yeşili (Çözüldü) */
+  --color-warning: #D9A02C;         /* Amber (Öncelik) */
+  --color-info: #3B5998;            /* Lacivert (Bilgi) */
+  
+  /* Durum Rozetleri - Damga Renkleri */
+  --stamp-open: #C1440E;
+  --stamp-in-progress: #D9A02C;
+  --stamp-pending: #3B5998;
+  --stamp-resolved: #2F6B4F;
+  --stamp-closed: #6B7280;
+  
+  /* Tipografi */
+  --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+  --font-sans: 'Archivo', -apple-system, BlinkMacSystemFont, sans-serif;
+  
+  /* Gölgeler - Minimal, Kağıt Üzerinde */
+  --shadow-paper: 0 1px 3px rgba(27, 42, 74, 0.08);
+  --shadow-stamp: 0 2px 4px rgba(27, 42, 74, 0.12);
+  
+  /* Border Radius - Minimal */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+}
+
+/* Karanlık Mod - Gece Vardiyası Tahtası */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #1C1F26;
+    --color-surface: #262B33;
+    --color-border: #3A4049;
+    --color-text-primary: #E7ECEF;
+    --color-text-secondary: #A0AEC0;
+    --color-text-muted: #718096;
+  }
+}
+
+/* Body */
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Tipografi */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
+}
+
+/* Monospace elementler (numaralar, tarihler, kodlar) */
+.ticket-id,
+.ticket-date,
+code,
+.mono {
+  font-family: var(--font-mono);
+  font-weight: 500;
+}
+
+/* Link stilleri */
+a {
+  color: var(--color-info);
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+a:hover {
+  opacity: 0.8;
+}
+
+/* Buton temel stilleri - Form Butonu Estetiği */
+button {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 2px;
+}
+
+/* Input temel stilleri */
+input, textarea, select {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.75rem;
+  transition: border-color 0.2s;
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--color-text-primary);
+}
+
+/* Monospace input'lar */
+input[type="number"],
+input.mono {
+  font-family: var(--font-mono);
+}
+
+/* Scrollbar - Minimal */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+/* Animasyonlar */
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes stampAppear {
+  from {
+    transform: rotate(-8deg) scale(0.5);
+    opacity: 0;
+  }
+  to {
+    transform: rotate(-8deg) scale(1);
+    opacity: 0.85;
+  }
+}
+
+/* Focus Visible - Erişilebilirlik */
+*:focus-visible {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 2px;
+}
